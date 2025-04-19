@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const uri = "mongodb+srv://CCPBACKEND:<db_password>@cluster0.auilqif.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGO_URI;
 
 const options = {
   serverSelectionTimeoutMS: 15000,
@@ -9,6 +10,8 @@ const options = {
 
 async function connectdb() {
   try {
+    console.log("Attempting MongoDB connection...");
+    mongoose.set('debug', true);
     await mongoose.connect(uri, options);
     console.log("Successfully connected to MongoDB Atlas via Mongoose!");
   } catch (err) {
