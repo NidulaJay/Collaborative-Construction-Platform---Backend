@@ -1,28 +1,80 @@
-<!-- emailTemplate.html -->
 <!DOCTYPE html>
 <html>
   <head>
     <style>
-      .container {
-        padding: 20px;
+      body {
+        background-color: #bfe6ff;
+        margin: 0;
+        padding: 0;
         font-family: Arial, sans-serif;
-        border: 1px solid #eee;
-        border-radius: 10px;
       }
-      .button {
-        background-color: #007bff;
-        color: white;
-        padding: 10px 20px;
-        text-decoration: none;
-        border-radius: 5px;
+
+      .email-wrapper {
+        width: 100%;
+        padding: 40px 0;
+        text-align: center;
+        background-color: #bfe6ff;
+      }
+
+      .logo {
+        margin-bottom: 20px;
+      }
+
+      .logo img {
+        width: 120px;
+        height: auto;
+      }
+
+      .container {
+        background-color: #ffffff;
+        width: 90%;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        text-align: center;
+      }
+
+      .container h2 {
+        color: #333333;
+      }
+
+      .container p {
+        color: #555555;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .otpmain {
+        margin-top: 20px;
+        padding: 15px 0;
+        color: #555555;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 8px;
+      }
+
+      .otp {
+        color: #007bff;
+        margin-left: 5px;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h2>{{EMAIL_TITLE}}</h2>
-      <p>{{EMAIL_DESCRIPTION}}</p>
-      <a class="button">{{EMAIL_OTP}}</a>
+    <div class="email-wrapper">
+      <div class="logo">
+        <img src="cid:logo" alt="CCP Logo" />
+      </div>
+
+      <div class="container">
+        <h2>{{EMAIL_TITLE}}</h2>
+        <p>{{EMAIL_DESCRIPTION}}</p>
+
+        <div class="otpmain">
+          OTP: <span class="otp">{{EMAIL_OTP}}</span>
+        </div>
+      </div>
     </div>
   </body>
 </html>

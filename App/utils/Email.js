@@ -1,33 +1,54 @@
-const nodemailer = require('nodemailer');
+const fs = require("fs");
+const nodemailer = require("nodemailer");
+const path = require("path");
+
 require('dotenv').config();
 
-const send = nodemailer.createTransport({
-    host: "smtp.gmail.com", 
-    port: 587, 
-    secure: false, 
-    auth: {
-        user: process.env.EMAIL_USER, 
+async function sendemail(to, subject, title, otp, description) {
+  try{
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    },
-});
+      }
+    });
+  
+    // Load the template
+    let htmlTemplate = fs.readFileSync(path.join(__dirname, '../templates/Email.html'), 'utf8');
+  
+    // Replace placeholders
+    htmlTemplate = htmlTemplate
+      .replace("{{EMAIL_TITLE}}", title)
+      .replace("{{EMAIL_OTP}}", otp)
+      .replace("{{EMAIL_DESCRIPTION}}", description);
+  
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      html: htmlTemplate,
+      attachments: [
+        {
+          filename: 'logo.png', // this is the name shown in email
+          path: path.join(__dirname, '../assets/images/Logo.png'), // adjust to your actual image path
+          cid: 'logo' // this must match the cid used in your HTML template
+        }
+      ]
+    };
 
-const sendemail = async (email, resetCode) => {
-  const credentials = {
-    from: process.env.GMAIL_USER,
-    to: email,
-    subject: 'Password Reset Code',
-    text: `Your password reset code is: ${resetCode}`,
-  };
+    try{
+      const info = await transporter.sendMail(mailOptions);
+      console.log(info.response)
+    } catch (err){
+      console.log(err)
+    }
 
-  try {
-    await send.sendMail(credentials);
-  } catch (error) {
-    console.error('Error sending email:', error);
-    throw new Error('Failed to send reset password email');
+
+  } catch (err) {
+    console.log(err)
   }
-};
-
-
-
+  
+}
 
 module.exports = { sendemail };

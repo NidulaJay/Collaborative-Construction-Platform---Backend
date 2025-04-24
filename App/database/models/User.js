@@ -10,12 +10,13 @@ const userSchema = new mongoose.Schema({
   birthdate: {type: Date, required: true,},
   gender: {type: String, required: true, enum: ['Male', 'Female', 'Other']},
   nic: {type: String, required: true},
-  address: {type: String, required: false, minlength: 5,},
+  address: {type: String, required: false},
   userRole: {type: String, required: true, enum: ['user', 'contractor', 'architecture', 'supplier'], default: 'user'},
   city: {type: String, required: false},
   state: {type: String, required: false},
   Zip: {type: String, required: false},
-  password: {type: String, required: true, minlength: 6}
+  password: {type: String, required: true, minlength: 6},
+  status: {type: Boolean, required: true, default: false}
 });
 
 const User = mongoose.model('User', userSchema);

@@ -6,6 +6,7 @@ const uri = process.env.MONGO_URI;
 const options = {
   serverSelectionTimeoutMS: 15000,
   connectTimeoutMS: 10000,
+  ssl: true
 };
 
 async function connectdb() {
@@ -19,6 +20,6 @@ async function connectdb() {
   }
 }
 
-connectdb().catch(console.dir);
+// connectdb().catch(console.dir);
 
 module.exports = connectdb;
