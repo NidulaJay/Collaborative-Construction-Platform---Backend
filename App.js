@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 
 
 const userRoutes = require("./App/routes/users/User")
+const ProjectRoutes = require("./App/routes/projects/Project")
 require('dotenv').config();
 
 app.use(cors({
@@ -14,8 +15,11 @@ app.use(cors({
     credentials: true
 }));
 
+
+
 app.use(cookieParser()); // if you're using cookies
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(session({
     secret: '1b522660fd91c88df55cd68e1e7d208a47b620b2e9b06d1c9b6d6d472d1d7e109df9f833105873e2dab97860d68530bce196adefb9d4770c67cf28c65146af6f', 
     resave: false,             
@@ -43,6 +47,8 @@ const server = app.listen(PORT, () => {
   
 
   app.use("/user", userRoutes);
+  app.use("/Project", ProjectRoutes);
+
 
 
   
