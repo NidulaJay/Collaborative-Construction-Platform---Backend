@@ -1,0 +1,36 @@
+{
+  "name": "collaborative-construction-platform---backend",
+  "version": "1.0.0",
+  "description": "Collaborative platform for construction industry",
+  "main": "index.js",
+  "scripts": {
+    "start": "node App.js",
+    "dev": "nodemon App.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NidulaJay/Collaborative-Construction-Platform---Backend.git"
+  },
+  "author": "NidulaJay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NidulaJay/Collaborative-Construction-Platform---Backend/issues"
+  },
+  "homepage": "https://github.com/NidulaJay/Collaborative-Construction-Platform---Backend#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "fs": "^0.0.1-security",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.2",
+    "multer": "^1.4.5-lts.2",
+    "nodemailer": "^6.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
