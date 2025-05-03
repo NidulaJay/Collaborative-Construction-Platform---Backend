@@ -17,6 +17,7 @@ let emailStore;
 
 let OTPSucces = false;
 let sessionCreationCheck = false;
+logOut = false;
 
 router.post("/register", async(req, res) => {
     
@@ -253,11 +254,33 @@ router.post("/checkSession", async (req, res) => {
 router.get("/LoginStatus", async (req, res) => {
     if (sessionCreationCheck){
         sessionCreationCheck = false;
+        if (logOut){
+            return res.status(401).json({error: 'error'})
+        }
         return res.status(201).json({message: 'Forcefull Logout'})
     }
 
     res.status(401).json({error: 'error'})
 })
+
+router.post("/LogOut", (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Session destroy error:', err);
+            return res.status(500).json({ message: 'Failed to destroy session' });
+        }
+
+        // Remove session cookie from browser
+        res.clearCookie('connect.sid', {
+            path: '/', 
+            httpOnly: true,
+            secure: false, 
+            sameSite: 'lax'
+        });
+        logOut = true;
+        return res.status(200).json({ message: 'Session destroyed' });
+    });
+});
 
 
 module.exports = router;

@@ -38,6 +38,11 @@ router.post("/register", upload.single('document'), async (req, res) => {
         const milestones = req.body.Milestones ? JSON.parse(req.body.Milestones) : [];
         const locationOnMap = req.body.locationOnMap ? JSON.parse(req.body.locationOnMap) : {};
 
+        const validUsers = users.filter(user => 
+            user.userType && 
+            ['user', 'contractor', 'architecture', 'supplier'].includes(user.userType)
+        );
+
 
         const projectDataFields  = {
             projectName: req.body.projectName,
@@ -47,7 +52,7 @@ router.post("/register", upload.single('document'), async (req, res) => {
             Sdate: req.body.Sdate,
             Edate: req.body.Edate,
             locationOnMap: locationOnMap,
-            Users: users,
+            Users: validUsers,
             Milestones: milestones
         }
 
@@ -69,6 +74,22 @@ router.post("/register", upload.single('document'), async (req, res) => {
     catch (err) {
         console.error(err)
     }
+});
+
+
+router.post("/getAll", async (req, res) => {
+  try{
+    // const Session = await SessionCheck(req, res)
+    // if (Session){
+      console.log(req.body.email)
+      const allProject = await projectdb.find({owner: req.body.email})
+      res.status(201).json({projects: allProject})
+    // }
+
+
+  } catch (err) {
+
+  }
 })
 
 

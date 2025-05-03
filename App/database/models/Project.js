@@ -9,8 +9,8 @@ const projectSchema = new mongoose.Schema({
     Edate: {type: Date, required: true},
     locationOnMap: {type: {lat: {type: Number}, lng: {type: Number}}},
     documents: {type: [{link: {type: String}, status: {type: Boolean, default: false}, name: {type: String}}]},
-    Users: {type: [{userType: {type: String, enum: ['user', 'contractor', 'architecture', 'supplier']}, userEmail: {type: String}}]},
-    Milestones:{type: [{sDate: {type: Date}, eDate: {type: Date}, Name: {type: String}}]}
+    Users: {type: [{userType: {type: String, enum: ['user', 'contractor', 'architecture', 'supplier']}, userEmail: {type: String}, default: []}]},
+    Milestones:{type: [{sDate: {type: Date}, eDate: {type: Date}, Name: {type: String}, status: {type: Boolean, default: false}, started: {type: Boolean, default: false}}]}
 });
 
 const Project = mongoose.model('Project', projectSchema);
