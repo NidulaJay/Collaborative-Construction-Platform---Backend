@@ -93,9 +93,10 @@ router.get("/otpGen", async(req, res) => {
         }
 
         console.log(req.query.email, req.query.type)
-        emailStore = req.query.email
+        req.session.email = req.query.email
+        console.log('email is stored as ' + req.session.email)
 
-        DigiOtp = crypto.randomInt(100000, 999999).toString();
+        req.session.otp = crypto.randomInt(100000, 999999).toString();
         
         let Title;
         let description;
@@ -115,7 +116,7 @@ router.get("/otpGen", async(req, res) => {
 
         try{
             console.log('attempting to send email')
-            await sendemail(req.query.email, subject, Title, DigiOtp, description)
+            await sendemail(req.query.email, subject, Title, req.session.otp, description)
         } catch (err) {
             console.log(err)
             res.status(500).json({ error: err})
@@ -134,12 +135,13 @@ router.post("/CheckOTP", async(req, res) => {
     try{
         const EmailOtp = req.body.email;
 
-        if(emailStore != EmailOtp){
+        console.log(req.session.email) // this is display as undefined
+        if(req.session.email != EmailOtp){
             return res.status(401).json({error: 'email didnt request to password change'})
         }
 
-        if(DigiOtp == req.body.otp){
-            DigiOtp = null;
+        if(req.session.otp == req.body.otp){
+            req.session.otp = null;
             if (req.body.type == 'Signup') {
                 try{
                     await usersDB.updateOne(
@@ -154,7 +156,7 @@ router.post("/CheckOTP", async(req, res) => {
             }
 
             else if (req.body.type == 'Forget password'){
-                OTPSucces = true;
+                req.session.otpSuccess = true;
                 console.log("forget password email verified")
                 return res.status(201).json({message: 'Permison granted'})
             }
@@ -173,11 +175,11 @@ router.post("/changePassword", async(req, res) => {
     try{
         const Email = req.body.email;
         const Password = await bcrypt.hash(req.body.password, 10);
-        if (emailStore == Email){
-            if(OTPSucces){
+        if (req.session.email == Email){
+            if(req.session.otpSuccess){
                 await usersDB.updateOne({email: Email},{$set: {password: Password}})
-                emailStore = null;
-                OTPSucces = false;
+                req.session.email = null;
+                req.session.otpSuccess = false;
                 return res.status(201).json({message: 'pasword changed'})
             }
             else{
@@ -235,7 +237,7 @@ router.post("/checkSession", async (req, res) => {
     try {
         const Session = await SessionCheck(req, res);
         if (Session) {
-            console.log("Session exists:", Session);
+            // console.log("Session exists:", Session);
             return res.status(200).json({ user: Session });
         }
         else {

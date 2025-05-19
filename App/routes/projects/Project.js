@@ -72,7 +72,7 @@ router.post("/register", upload.single('document'), async (req, res) => {
 
     }
     catch (err) {
-        console.error(err)
+        res.status(500).json({error: err})
     }
 });
 
@@ -86,9 +86,19 @@ router.post("/getAll", async (req, res) => {
       res.status(201).json({projects: allProject})
      }
 
-
   } catch (err) {
+    res.status(500).json({error: err})
+  }
+})
 
+router.post("/getProject" , async (req,res) => {
+  try{
+    const Session = await SessionCheck(req, res)
+    if (Session){
+    const project = await projectdb.findById({id})
+    }
+  } catch (err) {
+    res.status(500).json({error: err})
   }
 })
 
