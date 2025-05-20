@@ -44,7 +44,7 @@ connectdb();
 
 const PORT = process.env.PORT || 3000;
 
-app.use('/Uploads', express.static(path.join(__dirname, 'App/Uploads/Documents')));
+app.use('/Uploads/Documents', express.static(path.join(__dirname, 'App/Uploads/Documents')));
 app.use("/user", userRoutes);
 app.use("/Project", ProjectRoutes);
 app.use("/Material", MaterialRoutes);

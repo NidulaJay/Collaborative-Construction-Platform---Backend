@@ -102,5 +102,52 @@ router.post("/getProject" , async (req,res) => {
   }
 })
 
+router.post("/getOne", async (req, res) => {
+  try {
+    const Session = await SessionCheck(req, res);
+    if (Session) {
+      if (!req.body.id) {
+        return res.status(400).json({ error: "Project ID is required" });
+      }
+      const project = await projectdb.findById(req.body.id);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      res.status(200).json({ project });
+    }
+  } catch (err) {
+    console.error("Error fetching project:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/delete", async (req, res) => {
+  try {
+    const Session = await SessionCheck(req, res);
+    if (Session) {
+      if (!req.body.id) {
+        return res.status(400).json({ error: "Project ID is required" });
+      }
+      const project = await projectdb.findById(req.body.id);
+      
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      if (project.owner !== req.body.email) {
+        return res.status(403).json({ error: "You are not authorized to delete this project" });
+      }
+      const deletedProject = await projectdb.findByIdAndDelete(req.body.id);
+      
+      res.status(200).json({ 
+        message: "Project deleted successfully", 
+        projectId: req.body.id 
+      });
+    }
+  } catch (err) {
+    console.error("Error deleting project:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;
